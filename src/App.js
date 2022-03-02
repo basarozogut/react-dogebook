@@ -1,24 +1,38 @@
 import logo from './logo.svg';
 import './App.css';
+import DogList from './components/DogList';
+import DogGallery from './components/DogGallery';
+import { Container, Row, Col } from 'react-bootstrap';
+import { useEffect, useState } from 'react';
+import api from './api/api';
+
 
 function App() {
+  const [dogs, setDogs] = useState([]);
+  const [currentBreed, setCurrentBreed] = useState(null);
+
+  useEffect(() => {
+    api.get(`breeds/list/all`)
+      .then(res => {
+        setDogs(Object.keys(res.data.message));
+      });
+  }, []);
+
+  function handleDogSelected(breed) {
+    setCurrentBreed(breed);
+  }
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Container>
+      <Row>
+        <Col md={3}>
+          <DogList dogs={dogs} onDogSelected={handleDogSelected} />
+        </Col>
+        <Col md={9}>
+          <DogGallery breed={currentBreed} />
+        </Col>
+      </Row>
+    </Container>
   );
 }
 
