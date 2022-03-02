@@ -29,8 +29,11 @@ export default function DogGallery(props) {
     }
 
     return (
-        <Row xs={1} md={2} className="g-4">
-            {gallery}
-        </Row>
+        <div>
+            <h3>{props.breed}</h3>
+            <Row xs={1} md={2} className="g-4">
+                {gallery}
+            </Row>
+        </div>
     );
 }

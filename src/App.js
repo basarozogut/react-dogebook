@@ -3,7 +3,7 @@ import './App.css';
 import DogList from './components/DogList';
 import DogGallery from './components/DogGallery';
 import { Container, Row, Col, Form } from 'react-bootstrap';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import api from './api/api';
 
 
@@ -12,6 +12,11 @@ function App() {
   const [dogsFiltered, setDogsFiltered] = useState([]);
   const [currentBreed, setCurrentBreed] = useState(null);
   const [searchInput, setSearchInput] = useState("");
+  const inputEl = useRef(null);
+
+  useEffect(() => {
+    inputEl.current.focus();
+  }, []);
 
   useEffect(() => {
     api.get(`breeds/list/all`)
@@ -40,6 +45,7 @@ function App() {
         <Col md={3}>
           <h3>Doges</h3>
           <Form.Control
+            ref={inputEl}
             placeholder="Doge search"
             className="mb-3"
             onChange={handleOnSearchInputChange}
