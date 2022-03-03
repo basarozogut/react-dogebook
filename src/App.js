@@ -12,6 +12,7 @@ function App() {
   const [dogsFiltered, setDogsFiltered] = useState([]);
   const [currentBreed, setCurrentBreed] = useState(null);
   const [searchInput, setSearchInput] = useState("");
+  const [loading, setLoading] = useState(true);
   const inputEl = useRef(null);
 
   useEffect(() => {
@@ -22,6 +23,7 @@ function App() {
     api.get(`breeds/list/all`)
       .then(res => {
         setDogs(Object.keys(res.data.message));
+        setLoading(false);
       });
   }, []);
 
@@ -42,7 +44,7 @@ function App() {
   return (
     <Container>
       <Row>
-        <Col md={3}>
+        <Col md={3} xs={6}>
           <h3>Doges</h3>
           <Form.Control
             ref={inputEl}
@@ -51,10 +53,11 @@ function App() {
             onChange={handleOnSearchInputChange}
             value={searchInput} />
           <DogList
+            loading={loading}
             dogs={dogsFiltered}
             onDogSelected={handleDogSelected} />
         </Col>
-        <Col md={9}>
+        <Col md={9} xs={6}>
           <DogGallery breed={currentBreed} />
         </Col>
       </Row>
