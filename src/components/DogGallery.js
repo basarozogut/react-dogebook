@@ -1,9 +1,12 @@
 import { useEffect, useState } from "react";
 import api from "../api/api";
-import { Card, Col, Row } from "react-bootstrap";
+import { Button, Card, Col, Row } from "react-bootstrap";
 
 export default function DogGallery(props) {
     const [images, setImages] = useState([]);
+    const [page, setPage] = useState(1);
+
+    const imagesPerPage = 10;
 
     useEffect(() => {
         if (props.breed) {
@@ -14,9 +17,18 @@ export default function DogGallery(props) {
         }
     }, [props.breed]);
 
+    function handleLoadMoreClick() {
+        setPage(prev => prev + 1);
+    }
+
+    function areThereMorePagesToLoad() {
+        const numberOfImagesDisplayed = imagesPerPage * page;
+        return numberOfImagesDisplayed < images.length;
+    }
+
     let gallery = null;
     if (images.length > 0) {
-        gallery = images.slice(0, 10).map(url => (
+        gallery = images.slice(0, imagesPerPage * page).map(url => (
             <Col key={url}>
                 <Card>
                     <Card.Img variant="top" src={url} />
@@ -31,9 +43,14 @@ export default function DogGallery(props) {
     return (
         <div>
             <h3>{props.breed}</h3>
-            <Row xs={1} md={2} className="g-4">
+            <Row xs={1} md={2} className="g-4 mb-3">
                 {gallery}
             </Row>
+            {areThereMorePagesToLoad() &&
+                <div className="text-center">
+                    <Button variant="primary" onClick={handleLoadMoreClick}>Load More</Button>
+                </div>
+            }
         </div>
     );
 }
