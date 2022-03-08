@@ -9,7 +9,7 @@ export default function DogList(props) {
     return (
         <div>
             {loading}
-            {props.dogs.length > 0 &&
+            {props.dogs && props.dogs.length > 0 &&
                 <ListGroup>
                     {props.dogs.map((dog) =>
                         <ListGroup.Item key={dog} action onClick={() => props.onDogSelected(dog)}>
